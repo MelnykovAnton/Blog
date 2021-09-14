@@ -43,8 +43,8 @@ class PostController extends Controller
         if ($request->hasFile('image'))
             $data['image'] = Storage::disk('public')->put('/images', $data['image']);
 
-        Post::create($data);
-        return response()->redirectToRoute('post.create');
+        $post = Post::create($data);
+        return response()->redirectToRoute('post.edit', $post->id);
     }
 
     /**
@@ -66,7 +66,9 @@ class PostController extends Controller
      */
     public function edit($id)
     {
-        //
+        $post = Post::findOrFail($id);
+        $post->image = $post->image ? '/storage/' . $post->image : null;
+        return view('post.edit', ['post' => $post]);
     }
 
     /**
@@ -76,9 +78,15 @@ class PostController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function update(PostRequest $request, $id)
     {
-        //
+        $post = Post::findOrFail($id);
+        $post->fill($request->validated());
+        if ($request->hasFile('image'))
+            $post['image'] = Storage::disk('public')->put('/images', $request->file('image'));
+
+        $post->save();
+        return response()->redirectToRoute('post.edit', $post->id);
     }
 
     /**

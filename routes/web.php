@@ -19,4 +19,4 @@ Auth::routes();
 
 Route::get('/', [HomeController::class, 'index'])->name('home');
 Route::resource('/post', PostController::class)
-    ->only('index', 'create', 'store')->middleware('auth');
+    ->except('destroy')->middleware('auth');
