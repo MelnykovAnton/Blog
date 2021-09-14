@@ -27,6 +27,7 @@ class PostRequest extends FormRequest
             'title' => 'required|string',
             'content' => 'required|string',
             'is_public' => 'required|boolean',
+            'image' => 'file|mimes:jpg,jpeg,gif,png',
         ];
     }
 }

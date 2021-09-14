@@ -11,7 +11,7 @@
                     Create post
                 </div>
                 <div class="card-body">
-                    <form action="{{route('post.store')}}" method="POST">
+                    <form action="{{route('post.store')}}" method="POST" enctype="multipart/form-data">
                         @csrf
                         <div class="form-group">
                             <label for="title">Title</label>
@@ -20,6 +20,10 @@
                         <div class="mb-3">
                             <label for="content" class="form-label">Content</label>
                             <textarea name="content" class="form-control" id="content" rows="3"></textarea>
+                        </div>
+                        <div class="mb-3 custom-file">
+                            <input accept="image/png, image/gif, image/jpeg" name="image" type="file" class="custom-file-input" id="image">
+                            <label class="custom-file-label" for="image">Choose image</label>
                         </div>
                         <div class="form-group form-check">
                             <input name="is_public" type="hidden" value="0">

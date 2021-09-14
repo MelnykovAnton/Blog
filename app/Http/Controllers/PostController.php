@@ -6,6 +6,7 @@ use App\Http\Requests\PostRequest;
 use App\Models\Post;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Storage;
 
 class PostController extends Controller
 {
@@ -39,6 +40,9 @@ class PostController extends Controller
     {
         $data = $request->validated();
         $data['author_id'] = Auth::id();
+        if ($request->hasFile('image'))
+            $data['image'] = Storage::disk('public')->put('/images', $data['image']);
+
         Post::create($data);
         return response()->redirectToRoute('post.create');
     }

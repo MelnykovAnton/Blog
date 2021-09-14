@@ -13,5 +13,5 @@ class Post extends Model
         return $this->belongsTo(User::class, 'author_id');
     }
 
-    protected $fillable = ['title', 'content', 'is_public', 'author_id'];
+    protected $fillable = ['title', 'content', 'image', 'is_public', 'author_id'];
 }
