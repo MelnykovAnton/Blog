@@ -17,7 +17,7 @@ class PostController extends Controller
             $posts->where('is_public', true);
         }
 
-        return view('post.all', ['posts' => $posts->get()]);
+        return view('post.all', ['posts' => $posts->paginate(10)->withQueryString()]);
     }
 
     /**
@@ -27,7 +27,7 @@ class PostController extends Controller
      */
     public function index()
     {
-        return view('post.index', ['posts' => Post::all()]);
+        return view('post.index', ['posts' => Post::paginate(10)->withQueryString()]);
     }
 
     /**
