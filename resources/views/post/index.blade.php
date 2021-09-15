@@ -13,23 +13,28 @@
                 <div class="card-body">
                     <a href="{{route('post.create')}}" type="button" class="btn btn-primary mb-3">Create post</a>
 
-                    <div class="row row-cols-1 row-cols-md-12 g-4">
+                    <table class="table">
+                        <thead>
+                        <tr>
+                            <th scope="col">#</th>
+                            <th scope="col">Title</th>
+                            <th scope="col">Is public</th>
+                            <th scope="col">Created at</th>
+                            <th scope="col">Updated at</th>
+                        </tr>
+                        </thead>
+                        <tbody>
                         @foreach($posts as $post)
-                        <div class="col mb-3">
-                            <div class="card">
-                                <div class="card-header">{{$post->author->name}}</div>
-                                @if($post->image != null)
-                                <img src="{{$post->image}}" class="card-img-top">
-                                @endif
-                                <div class="card-body">
-                                    <h5 class="card-title">{{$post->title}}</h5>
-                                    <p class="card-text text-truncate">{{$post->content}}</p>
-                                    <a class="btn btn-primary">Read more</a>
-                                </div>
-                            </div>
-                        </div>
+                            <tr>
+                                <th scope="row">{{$post->id}}</th>
+                                <td><a href="{{route('post.edit', $post->id)}}">{{$post->title}}</a></td>
+                                <td><input type="checkbox" disabled {{$post->is_public ? 'checked' : ''}}></td>
+                                <td>{{date_format($post->created_at, "d-m-Y  H:i")}}</td>
+                                <td>{{date_format($post->updated_at, "d-m-Y  H:i")}}</td>
+                            </tr>
                         @endforeach
-                    </div>
+                        </tbody>
+                    </table>
                 </div>
             </div>
         </div>
