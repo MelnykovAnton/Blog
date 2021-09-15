@@ -27,7 +27,10 @@ class PostController extends Controller
      */
     public function index()
     {
-        return view('post.index', ['posts' => Post::paginate(10)->withQueryString()]);
+        return view('post.index', [
+            'posts' => Post::where('author_id', Auth::id())
+                ->paginate(10)->withQueryString()
+        ]);
     }
 
     /**
