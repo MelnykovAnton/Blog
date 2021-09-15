@@ -4,12 +4,22 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\PostRequest;
 use App\Models\Post;
-use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Storage;
 
 class PostController extends Controller
 {
+    public function getAllPosts()
+    {
+        $posts = Post::where('status', 'accepted');
+
+        if (!Auth::check()) {
+            $posts->where('is_public', true);
+        }
+
+        return view('post.all', ['posts' => $posts->get()]);
+    }
+
     /**
      * Display a listing of the resource.
      *
@@ -17,7 +27,7 @@ class PostController extends Controller
      */
     public function index()
     {
-        return view('post.index');
+        return view('post.index', ['posts' => Post::all()]);
     }
 
     /**
@@ -40,9 +50,10 @@ class PostController extends Controller
     {
         $data = $request->validated();
         $data['author_id'] = Auth::id();
-        if ($request->hasFile('image'))
-            $data['image'] = Storage::disk('public')->put('/images', $data['image']);
-
+        if ($request->hasFile('image')) {
+            $imagePath = $request->file('image')->store('public/images');
+            $data['image'] = Storage::url($imagePath);
+        }
         $post = Post::create($data);
         return response()->redirectToRoute('post.edit', $post->id);
     }
@@ -67,7 +78,6 @@ class PostController extends Controller
     public function edit($id)
     {
         $post = Post::findOrFail($id);
-        $post->image = $post->image ? '/storage/' . $post->image : null;
         return view('post.edit', ['post' => $post]);
     }
 
@@ -82,8 +92,10 @@ class PostController extends Controller
     {
         $post = Post::findOrFail($id);
         $post->fill($request->validated());
-        if ($request->hasFile('image'))
-            $post['image'] = Storage::disk('public')->put('/images', $request->file('image'));
+        if ($request->hasFile('image')) {
+            $imagePath = $request->file('image')->store('public/images');
+            $post['image'] = Storage::url($imagePath);
+        }
 
         $post->save();
         return response()->redirectToRoute('post.edit', $post->id);
