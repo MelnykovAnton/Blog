@@ -16,10 +16,20 @@
                         <div class="form-group">
                             <label for="title">Title</label>
                             <input name="title" type="text" class="form-control" id="title" aria-describedby="emailHelp">
+                            @error('title')
+                            <div class="invalid-feedback" style="display: block;">
+                                {{$message}}
+                            </div>
+                            @enderror
                         </div>
                         <div class="mb-3">
                             <label for="content" class="form-label">Content</label>
                             <textarea name="content" class="form-control" id="content" rows="3"></textarea>
+                            @error('content')
+                            <div class="invalid-feedback" style="display: block;">
+                                {{$message}}
+                            </div>
+                            @enderror
                         </div>
                         <div class="mb-3 custom-file">
                             <input accept="image/png, image/gif, image/jpeg" name="image" type="file" class="custom-file-input" id="image">
